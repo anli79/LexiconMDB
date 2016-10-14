@@ -25,6 +25,25 @@ namespace LexiconMDB.Controllers
             return View(model);
         }
 
+        public ActionResult Genre(string id) {
+            if (string.IsNullOrWhiteSpace(id)) {
+                // hantera tomt id
+                return RedirectToAction("Index");
+            }
+            ViewBag.Genre = id;
+            var model = db.Movies
+                .Where(m => m.Genre.ToString().ToLower() == id.ToLower()); // Hämtar filmerna från databasen och plockar ut/ur Genre, där m är/anger/står för movie
+
+            if (model.Count() == 0) {
+                ViewBag.ResultMessage =                                     // Propertien ResultMessage finns inte utan skapas när man skriver detta uttryci ViewBag.ResultMessage. Lite farligt att göra så här!
+                    $"There are no movies in the genre '{id}'";
+            }
+
+
+            //return View("Index", model.ToList());
+            return View(model.ToList());
+        }
+
         // GET: Movies/Details/5
         public ActionResult Details(int? id)
         {
